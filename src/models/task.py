@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from ..utils.time_utils import parse_datetime
+
 @dataclass
 class Task:
     """地面保障任务类 - 对应 clean_task_info.csv"""
@@ -37,11 +39,11 @@ class Task:
         """判断是否为牵引车任务"""
         return self.TASKTYPECODE == 'TRACT'
 
+    def get_actual_begin_time(self) -> Optional[datetime]:
+        """Return actual begin time."""
+        return parse_datetime(self.TASKACTUALBEGINDATETIME)
+
     def get_actual_end_time(self) -> Optional[datetime]:
-        """获取实际结束时间"""
-        if self.TASKACTUALENDDATETIME:
-            try:
-                return datetime.strptime(self.TASKACTUALENDDATETIME, '%Y/%m/%d %H:%M')
-            except:
-                return None
-        return None
+        """Return actual end time."""
+        return parse_datetime(self.TASKACTUALENDDATETIME)
+

@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from ..utils.time_utils import parse_datetime
+
 
 @dataclass
 class Flight:
@@ -36,14 +38,10 @@ class Flight:
         return self.FLIGHTDIRECTION == 'D'
 
     def get_actual_time(self) -> Optional[datetime]:
-        """获取实际运行时间（进港用on-block，离港用off-block）"""
+        """Return actual time for arrival/departure."""
         time_str = self.ACTUALONBLOCKDATETIME if self.is_arrival() else self.ACTUALOFFBLOCKDATETIME
-        if time_str:
-            try:
-                return datetime.strptime(time_str, '%Y/%m/%d %H:%M')
-            except:
-                return None
-        return None
+        return parse_datetime(time_str)
+
 
 
 

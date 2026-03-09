@@ -1,0 +1,315 @@
+Loading datasets...
+Loaded flights: 1502 records
+Loaded tasks: 142 records
+INFO:     127.0.0.1:50880 - "GET /auth HTTP/1.1" 200 OK
+Loaded ADS-B points: 377356 records
+INFO:     127.0.0.1:50881 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50938 - "GET /assets/index-CTTMtokn.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50881 - "GET /assets/index-BGaB2Zn5.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51029 - "GET /auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51030 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51030 - "GET /workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51030 - "GET /assets/index-BGaB2Zn5.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60062 - "GET /assets/index-CTTMtokn.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:60062 - "GET /api/auth/session/sess-2b16cf82f69e4301a495566e46da48d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60062 - "GET /api/platform/overview HTTP/1.1" 503 Service Unavailable
+Loaded vehicle GPS points: 255784 records
+All datasets loaded.
+============================================================
+Running all matching steps...
+============================================================
+
+Matching flights to towing tasks...
+Matched 138/1502 flights with towing tasks
+  Total towing tasks: 142
+
+Matching flights to ADS-B (time window: +/-60 min, ground altitude <= 100)...
+Matched 1378 flights with ADS-B tracks
+  Total ADS-B points: 211668
+
+Matching tasks to vehicle GPS (distance <= 0.01 deg, time window: +/-30 min)...
+INFO:     127.0.0.1:54759 - "GET /auth HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61818 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61818 - "GET /workspace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61818 - "GET /assets/index-BGaB2Zn5.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61819 - "GET /assets/index-CTTMtokn.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:61819 - "GET /api/auth/session/sess-a0a939a259cf408cac6ce9aa6e61e910 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61819 - "GET /api/platform/overview HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61824 - "GET /api/auth/session/sess-a0a939a259cf408cac6ce9aa6e61e910 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61825 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61824 - "GET /api/auth/session/sess-a0a939a259cf408cac6ce9aa6e61e910 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61824 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61825 - "GET /api/auth/session/sess-a0a939a259cf408cac6ce9aa6e61e910 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61824 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61824 - "GET /api/platform/overview HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61825 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61907 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 503 Service Unavailable
+Matched 142 tasks with best-fit towing vehicles
+  Total GPS points retained: 29307
+  Average confidence: 40.8
+
+============================================================
+All matching steps finished
+============================================================
+
+Blockchain platform initialized
+INFO:     127.0.0.1:61909 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61933 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61964 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61965 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61964 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61965 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61964 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:61965 - "GET /api/platform/governance HTTP/1.1" 503 Service Unavailable
+INFO:     127.0.0.1:62040 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62040 - "GET /assets/index-BGaB2Zn5.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62041 - "GET /assets/index-CTTMtokn.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62040 - "GET /api/auth/session/sess-65c3d9a218b54cadb4ed1fbb4d4fa6a9 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62041 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62040 - "GET /api/platform/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62102 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62104 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62103 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62103 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62103 - "GET /api/auth/session/sess-65c3d9a218b54cadb4ed1fbb4d4fa6a9 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62104 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62104 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62103 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62103 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62103 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62200 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62200 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62200 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62200 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51996 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51996 - "GET /assets/index-BGaB2Zn5.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:51996 - "GET /assets/index-CTTMtokn.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:51996 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51997 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51997 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51997 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51997 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52037 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52076 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52076 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52076 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52126 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52834 - "GET /data-hub HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52834 - "GET /assets/index-BGaB2Zn5.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52835 - "GET /assets/index-CTTMtokn.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52835 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65252 - "GET /data-hub HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65252 - "GET /assets/index-BGaB2Zn5.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65253 - "GET /assets/index-CTTMtokn.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:65253 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53214 - "GET /trajectory HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53214 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60876 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64884 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64884 - "GET /assets/index-B4hpyWRQ.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64885 - "GET /assets/index-B7jDFjrF.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64884 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64962 - "GET /trajectory?view=workbench HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64962 - "GET /assets/index-B4hpyWRQ.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64963 - "GET /assets/index-B7jDFjrF.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64963 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56255 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62142 - "GET /trajectory?view=workbench HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62142 - "GET /assets/index-DPoXeEZP.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62143 - "GET /assets/index-B7jDFjrF.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62142 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62236 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62236 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62616 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62617 - "GET /api/platform/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62618 - "GET /api/platform/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62625 - "GET /api/platform/trace/HU7726-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62626 - "GET /api/platform/trace/HU7758-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62627 - "GET /api/platform/trace/HU7120-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62628 - "GET /api/platform/trace/JD5547-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60492 - "GET /trajectory?view=workbench HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60492 - "GET /assets/index-DHEFO5yZ.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60493 - "GET /assets/index-B7jDFjrF.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60492 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60492 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55343 - "GET /api/platform/trace/JD5547-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55343 - "GET /api/platform/trace/JD5547-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55344 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55389 - "GET /api/platform/trace/JD5547-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55390 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55418 - "GET /api/platform/trace/JD5547-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55419 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55489 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55488 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55512 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55488 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64326 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64325 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64375 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64325 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54478 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54477 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53175 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53174 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53175 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53174 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53183 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53174 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53199 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55759 - "GET /api/datasets/clean_main?limit=5&role=%3F%3F%3F%3F&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55760 - "GET /api/datasets/clean_task_info?limit=5&role=%3F%3F%3F%3F&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55761 - "GET /api/datasets/adsb_pvg_merged?limit=5&role=%3F%3F%3F%3F&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55802 - "GET /api/datasets/vehicle_gps_towing_merged?limit=5&role=%3F%3F%3F%3F&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55966 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55966 - "GET /assets/index-BSXEArG1.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55967 - "GET /assets/index-pfEEEp08.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55966 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49706 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49705 - "GET /api/platform/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49713 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49740 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49806 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50049 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50104 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50115 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64395 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64462 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64483 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64521 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64560 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64620 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51128 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51162 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51215 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51219 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51256 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64439 - "GET /data-hub?view=asset HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64440 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64441 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57109 - "GET /data-hub?view=asset HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57109 - "GET /assets/index-C1SR-urL.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57110 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57109 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57234 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57234 - "GET /assets/index-C1SR-urL.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:57235 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:57235 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61890 - "GET /api/datasets/clean_main HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60220 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60220 - "GET /assets/index-CJ7RHuu6.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60221 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60221 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60220 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64781 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64781 - "GET /assets/index-CJ7RHuu6.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64782 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:64782 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64919 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64928 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61527 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61527 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61527 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63718 - "GET /data-hub?view=privacy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63718 - "GET /assets/index-7g0lnxyF.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63719 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63718 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62616 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62617 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62616 - "GET /assets/index-5J81cl2K.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62617 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62616 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62862 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62862 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62862 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62934 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62933 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62933 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58429 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58429 - "GET /assets/index-5J81cl2K.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58430 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58430 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58430 - "GET /dashboard?view=command HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58430 - "GET /assets/index-5J81cl2K.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58433 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58430 - "GET /risk-lab?view=live HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58430 - "GET /assets/index-5J81cl2K.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58458 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58430 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58458 - "GET /api/platform/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58495 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58523 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58523 - "GET /assets/index-5J81cl2K.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58524 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:58523 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58524 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51367 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52676 - "GET /data-hub?view=preview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52676 - "GET /assets/index-COekdFaY.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52677 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52677 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52676 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52733 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=raw HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52733 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /dashboard?view=command HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52769 - "GET /assets/index-COekdFaY.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52770 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52770 - "GET /api/platform/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52825 - "GET /trajectory?view=workbench HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52826 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52825 - "GET /assets/index-COekdFaY.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:52825 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49996 - "GET /risk-lab?view=live HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49996 - "GET /assets/index-COekdFaY.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49997 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49996 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49997 - "GET /api/platform/overview HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50031 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50080 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50589 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50621 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50624 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61835 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61916 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51443 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51443 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51443 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57475 - "GET /api/platform/alerts?limit=10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57475 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57475 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57475 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59849 - "GET /api/datasets/clean_main?limit=60&role=%E7%9B%91%E7%AE%A1%E5%AE%A1%E8%AE%A1&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59848 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59938 - "GET /api/platform/trace/HU7758-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53342 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53384 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53396 - "GET /api/datasets/clean_main?limit=60&role=%E6%9C%BA%E5%9C%BA%E8%BF%90%E6%8E%A7&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53384 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53384 - "GET /api/datasets/clean_main?limit=60&role=%E6%9C%BA%E5%9C%BA%E8%BF%90%E6%8E%A7&view_mode=raw HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61530 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61530 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61545 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61545 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61612 - "GET /api/platform/trace HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61662 - "GET /api/platform/trace/HU7120-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61662 - "GET /api/platform/trace/HU7120-2025-09-15-D HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61777 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified

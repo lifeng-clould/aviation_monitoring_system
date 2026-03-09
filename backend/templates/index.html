@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>机坪牵引作业“智慧眼”监管与仿真平台</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', path='css/app.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-sA+4J6LGjLbX4z1kG3gzUY2sFQn2cSvG5p3ty3QTIW4="
+      crossorigin=""
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark brand-gradient py-3">
+      <div class="container-xxl">
+        <a class="navbar-brand fw-semibold" href="#"
+          >🛫 机坪牵引作业“智慧眼”</a
+        >
+        <span class="text-light-50">支持 A-CDM 的可信调度与监管平台</span>
+      </div>
+    </nav>
+
+    <header class="brand-gradient py-5 mb-4">
+      <div class="container-xxl">
+        <div class="row align-items-center">
+          <div class="col-lg-7">
+            <h1 class="display-5 fw-bold mb-3 text-white">
+              数据驱动 · 仿真评估 · 链上监管
+            </h1>
+            <p class="lead text-white-50 mb-4">
+              联盟链可信数据底座 + 数字孪生仿真，打造机坪牵引作业“事中监管”新范式。
+            </p>
+            <div class="hero-stats">
+              <div class="stat text-white-50">
+                数据集
+                <span>{{ summary.datasets.counts.clean_main + summary.datasets.counts.clean_task_info }}</span>
+              </div>
+              <div class="stat text-white-50">
+                轨迹点
+                <span>{{ summary.datasets.counts.adsb_pvg_merged + summary.datasets.counts.vehicle_gps_towing_merged }}</span>
+              </div>
+              <div class="stat text-white-50">
+                监管指标
+                <span>4×24h</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="card card-shadow glow">
+              <div class="card-body">
+                <h5 class="fw-semibold mb-3">实时数据体检</h5>
+                <div class="row g-3">
+                  {% for key, label in [('clean_main','航班主数据'),('clean_task_info','任务工单'),('adsb_pvg_merged','ADS-B 轨迹'),('vehicle_gps_towing_merged','车辆 GPS')] %}
+                  <div class="col-6">
+                    <div class="metric-card">
+                      <h6>{{ label }}</h6>
+                      <div class="metric-value">
+                        {{ "{:,}".format(summary.datasets.counts[key]) }}
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container-xxl pb-5">
+      <section class="mb-5">
+        <div class="row g-4">
+          <div class="col-xl-4 col-md-6">
+            <div class="card card-shadow h-100">
+              <div class="card-body">
+                <h6 class="section-title text-uppercase">航班-任务贯通率</h6>
+                <p class="display-6 fw-semibold mb-1">
+                  {{ "%.1f"|format(summary.success_rates.flight_task) }}%
+                </p>
+                <small class="text-muted"
+                  >以 FUUID 为主键，联通航班计划与地面保障工单。</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-md-6">
+            <div class="card card-shadow h-100">
+              <div class="card-body">
+                <h6 class="section-title text-uppercase">航班轨迹覆盖率</h6>
+                <p class="display-6 fw-semibold mb-1">
+                  {{ "%.1f"|format(summary.success_rates.flight_adsb) }}%
+                </p>
+                <small class="text-muted"
+                  >可视化 ADS-B 滑行轨迹，支撑冲突诊断与热点分析。</small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 col-md-12">
+            <div class="card card-shadow h-100">
+              <div class="card-body">
+                <h6 class="section-title text-uppercase">牵引任务-车辆匹配</h6>
+                <p class="display-6 fw-semibold mb-1">
+                  {{ "%.1f"|format(summary.success_rates.task_vehicle) }}%
+                </p>
+                <small class="text-muted"
+                  >车辆 GPS 与任务闭环关联，为速度合规与冲突分析提供依据。</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-5">
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="card card-shadow h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="section-title mb-0">匹配成功率趋势</h6>
+                  <button class="btn btn-sm btn-outline-primary" id="refresh-summary-btn">
+                    刷新数据
+                  </button>
+                </div>
+                <div id="matching-chart" style="height: 320px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card card-shadow h-100">
+              <div class="card-body">
+                <h6 class="section-title">数据分布</h6>
+                <div id="dataset-chart" style="height: 320px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-5">
+        <div class="card card-shadow">
+          <div class="card-body">
+            <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+              <div>
+                <h6 class="section-title mb-1">数据探索</h6>
+                <small class="text-muted"
+                  >选择不同数据集并使用关键字过滤，快速定位问题记录。</small
+                >
+              </div>
+              <div class="ms-auto d-flex gap-2">
+                <select class="form-select" id="dataset-select" style="min-width: 220px"></select>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="关键字（航班号 / 车辆号）"
+                  id="dataset-keyword"
+                />
+                <button class="btn btn-primary" id="dataset-refresh-btn">加载</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered align-middle" id="dataset-table">
+                <thead class="table-light"></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-5">
+        <div class="row g-4">
+          <div class="col-lg-8">
+            <div class="card card-shadow h-100">
+              <div class="card-body">
+                <div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+                  <div>
+                    <h6 class="section-title mb-1">轨迹监控中心</h6>
+                    <small class="text-muted"
+                      >选择航班或牵引车，回放 ADS-B / GPS 轨迹。</small
+                    >
+                  </div>
+                  <div class="ms-auto d-flex gap-2">
+                    <select class="form-select" id="trajectory-type" style="min-width: 150px">
+                      <option value="flight" selected>航班轨迹</option>
+                      <option value="vehicle">牵引车轨迹</option>
+                    </select>
+                    <select class="form-select" id="trajectory-identifier" style="min-width: 200px"></select>
+                  </div>
+                </div>
+                <div id="trajectory-map" style="height: 420px; border-radius: 0.75rem;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-shadow h-100">
+              <div class="card-body">
+                <h6 class="section-title mb-3">智能合约 · 合规实验室</h6>
+                <form id="compliance-form" class="mb-3">
+                  <label class="form-label">牵引车速度 (km/h)</label>
+                  <input type="range" class="form-range" min="0" max="10" step="0.1" value="2.5" id="speed-input" />
+                  <div class="d-flex justify-content-between mb-3">
+                    <small class="text-muted">0</small>
+                    <strong id="speed-value">2.5</strong>
+                    <small class="text-muted">10</small>
+                  </div>
+
+                  <label class="form-label">距机身距离 (m)</label>
+                  <input type="range" class="form-range" min="0" max="10" step="0.1" value="6" id="distance-input" />
+                  <div class="d-flex justify-content-between mb-3">
+                    <small class="text-muted">0</small>
+                    <strong id="distance-value">6.0</strong>
+                    <small class="text-muted">10</small>
+                  </div>
+
+                  <label class="form-label">试刹车次数</label>
+                  <input type="number" class="form-control mb-3" id="brake-input" min="0" max="5" value="2" />
+
+                  <button class="btn btn-primary w-100" type="submit">执行检测</button>
+                </form>
+                <div class="compliance-result" id="compliance-result">
+                  <p class="text-muted">等待输入参数…</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="card card-shadow">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h6 class="section-title mb-0">风险告警时间线</h6>
+                <small class="text-muted">展示链上留痕的关键场景，可在答辩中重点说明。</small>
+              </div>
+              <button class="btn btn-outline-secondary btn-sm" id="timeline-refresh-btn">
+                更新
+              </button>
+            </div>
+            <div class="timeline" id="timeline"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const SUMMARY_ENDPOINT = "/api/summary?limit=120";
+      const DATASET_ENDPOINT = "/api/datasets";
+      const CONTRACT_ENDPOINT = "/api/contracts/check";
+      const TRAJECTORY_FLIGHT_ENDPOINT = "/api/trajectories/flight";
+      const TRAJECTORY_VEHICLE_ENDPOINT = "/api/trajectories/vehicle";
+      const BLOCKCHAIN_STATS_ENDPOINT = "/api/blockchain/stats";
+      let summaryData = {{ summary | tojson }};
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.27.0/plotly.min.js"></script>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-o9N1j7kGPr+lCB+g32bFt4iXacIL2gZkEcBx0zYK7Rk="
+      crossorigin=""
+    ></script>
+    <script src="{{ url_for('static', path='js/app.js') }}"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>

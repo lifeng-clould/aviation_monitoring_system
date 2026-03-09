@@ -45,7 +45,8 @@ class Visualizer:
         if not expected_cols.issubset(df.columns):
             raise KeyError(f"缺少必要字段: {expected_cols - set(df.columns)}")
 
-        df = df.sort_values(by="TE")
+        df["TE_ts"] = pd.to_datetime(df["TE"], errors="coerce")
+        df = df.sort_values(by="TE_ts")
 
         fig = px.scatter_mapbox(
             df,
@@ -84,7 +85,8 @@ class Visualizer:
         if not required.issubset(df.columns):
             raise KeyError(f"缺少必要字段: {required - set(df.columns)}")
 
-        df = df.sort_values(by="LOCATIONTIME")
+        df["LOCATIONTIME_ts"] = pd.to_datetime(df["LOCATIONTIME"], errors="coerce")
+        df = df.sort_values(by="LOCATIONTIME_ts")
 
         fig = px.scatter_mapbox(
             df,
@@ -115,7 +117,7 @@ class Visualizer:
         if "TE" not in df.columns:
             raise KeyError("ADS-B 数据缺少时间字段 TE。")
 
-        df["time_str"] = pd.to_datetime(df["TE"]).dt.strftime("%H:%M:%S")
+        df["time_str"] = pd.to_datetime(df["TE"], errors="coerce").dt.strftime("%H:%M:%S")
 
         fig = px.scatter_mapbox(
             df,

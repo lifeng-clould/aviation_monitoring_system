@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from ..utils.time_utils import parse_datetime
+
 @dataclass
 class AircraftADSB:
     """飞机ADS-B数据类 - 对应 ADSB_PVG_merged.csv"""
@@ -29,13 +31,9 @@ class AircraftADSB:
     SOURCE_FILE: Optional[str] = None  # 源文件
 
     def get_timestamp(self) -> Optional[datetime]:
-        """获取时间戳"""
-        if self.TE:
-            try:
-                return datetime.strptime(self.TE, '%Y/%m/%d %H:%M')
-            except:
-                return None
-        return None
+        """Return ADS-B timestamp."""
+        return parse_datetime(self.TE)
+
 
     def get_position(self) -> tuple:
         """获取位置坐标"""

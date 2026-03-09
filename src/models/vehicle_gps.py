@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from ..utils.time_utils import parse_datetime
+
 @dataclass
 class VehicleGPS:
     """车辆GPS数据类 - 对应 vehicle_gps_towing_merged.csv"""
@@ -30,18 +32,17 @@ class VehicleGPS:
     SOURCE_FILE: Optional[str] = None  # 源文件
 
     def get_timestamp(self) -> Optional[datetime]:
-        """获取时间戳"""
-        if self.LOCATIONTIME:
-            try:
-                return datetime.strptime(self.LOCATIONTIME, '%Y/%m/%d %H:%M')
-            except:
-                return None
-        return None
+        """Return GPS timestamp."""
+        return parse_datetime(self.LOCATIONTIME)
+
 
     def get_position(self) -> tuple:
         """获取位置坐标"""
         return (self.LATITUDE, self.LONGITUDE)
 
     def is_towing_vehicle(self) -> bool:
-        """判断是否为牵引车"""
-        return '牵引车' in self.VEHICLETYPENAME or 'TRACT' in self.VEHICLETYPENAME.upper()
+        """Return True if the vehicle is a towing vehicle."""
+        raw = self.VEHICLETYPENAME or ""
+        name = raw.upper()
+        return ("TRACT" in name) or ("\u7275\u5f15" in raw) or ("\u62d6\u8f66" in raw)
+

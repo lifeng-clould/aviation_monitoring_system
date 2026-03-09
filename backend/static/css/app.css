@@ -1,0 +1,110 @@
+:root {
+    --brand-blue: #0f4c81;
+    --brand-yellow: #ffb703;
+    --bg-muted: #f2f5f8;
+    --border-soft: #e0e6ed;
+}
+
+body {
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background-color: var(--bg-muted);
+    color: #1f2a37;
+}
+
+.brand-gradient {
+    background: linear-gradient(135deg, #0f4c81 0%, #1f78ff 60%, #46c0ff 100%);
+    color: #fff;
+}
+
+.card-shadow {
+    box-shadow: 0 8px 24px rgba(15, 76, 129, 0.08);
+    border: none;
+}
+
+.metric-card h6 {
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: #6b778c;
+    text-transform: uppercase;
+}
+
+.metric-card .metric-value {
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: #0f4c81;
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.table-responsive {
+    max-height: 420px;
+    overflow: auto;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0;
+    left: 0.35rem;
+    width: 2px;
+    background: var(--border-soft);
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 1.2rem;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -0.1rem;
+    top: 0.35rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--brand-blue);
+    box-shadow: 0 0 0 4px rgba(15, 76, 129, 0.15);
+}
+
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.hero-stats .stat {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.hero-stats .stat span {
+    display: block;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.glow {
+    box-shadow: 0 10px 30px rgba(15, 76, 129, 0.18);
+}
+
+.compliance-result {
+    min-height: 80px;
+}
+
+@media (max-width: 991px) {
+    .hero-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Empty, Select, Slider, Table, Tag, Typography } from "antd";
 import { AimOutlined, CaretRightFilled, PauseOutlined, RedoOutlined } from "@ant-design/icons";
 import Map, { Layer, Marker, NavigationControl, Source, type MapRef } from "react-map-gl/maplibre";
@@ -27,7 +27,12 @@ const MAP_STYLE = {
 const aircraftTowLayer = { id: "aircraft-tow", type: "line", paint: { "line-color": "#0d5bd7", "line-width": 4.8, "line-opacity": 0.96 } } as const;
 const aircraftDepartureLayer = { id: "aircraft-departure", type: "line", paint: { "line-color": "#79b1ff", "line-width": 3.4, "line-opacity": 0.94 } } as const;
 const vehicleLayer = { id: "vehicle-path", type: "line", paint: { "line-color": "#f59a52", "line-width": 4.2, "line-opacity": 0.94 } } as const;
-const connectLayer = { id: "interaction-path", type: "line", paint: { "line-color": "#1f8f6f", "line-width": 2.3, "line-dasharray": [2, 2] as number[], "line-opacity": 0.85 } } as const;
+const PLAYBACK_OPTIONS = [
+  { value: 0.5, label: "0.5x" },
+  { value: 1, label: "1.0x" },
+  { value: 2, label: "2.0x" },
+  { value: 4, label: "4.0x" }
+];
 
 interface EventItem {
   key: string;
@@ -112,6 +117,19 @@ function nearestPoint(points: TracePoint[], targetMs: number) {
   return nearest;
 }
 
+function findCurrentEvent(events: EventItem[], currentMs: number | null) {
+  if (!events.length) return undefined;
+  if (currentMs === null) return events[0];
+  let active = events[0];
+  for (const item of events) {
+    const itemMs = toMillis(item.time);
+    if (itemMs !== null && itemMs <= currentMs) {
+      active = item;
+    }
+  }
+  return active;
+}
+
 function getBounds(points: TracePoint[]) {
   if (!points.length) return null;
   let minLon = points[0].lon;
@@ -158,6 +176,7 @@ export default function TrajectoryPage() {
   const [loading, setLoading] = useState(true);
   const [frameIndex, setFrameIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
+  const [playbackRate, setPlaybackRate] = useState(1);
   const [followView, setFollowView] = useState(true);
   const [selectedEventKey, setSelectedEventKey] = useState<string>();
   const mapRef = useRef<MapRef | null>(null);
@@ -171,6 +190,7 @@ export default function TrajectoryPage() {
         setCaseId(response.case.case_id);
         setFrameIndex(0);
         setSelectedEventKey(undefined);
+        setPlaybackRate(1);
         setPlaying(true);
       } finally {
         setLoading(false);
@@ -189,6 +209,7 @@ export default function TrajectoryPage() {
         setFrameIndex(0);
         setPlaying(true);
         setSelectedEventKey(undefined);
+        setPlaybackRate(1);
         setSearchParams((previous) => {
           const next = new URLSearchParams(previous);
           next.set("case", caseId);
@@ -234,14 +255,13 @@ export default function TrajectoryPage() {
   const vehicleTrail = useMemo(() => pointsBefore(vehiclePath, currentMs), [vehiclePath, currentMs]);
   const aircraftMarker = currentPoint(departureTrail.length ? departureTrail : towTrail, currentMs);
   const vehicleMarker = currentPoint(vehicleTrail, currentMs);
-  const interactionLine = aircraftMarker && vehicleMarker ? toFeature([aircraftMarker, vehicleMarker]) : undefined;
 
   const events = useMemo<EventItem[]>(() => [
-    { key: "tow-start", label: "\u5f00\u59cb\u7275\u5f15", time: phases.tow_start, actor: "\u5730\u670d\u516c\u53f8", note: "\u63a8\u51fa\u6307\u4ee4\u4e0b\u53d1\uff0c\u7275\u5f15\u8f66\u4e0e\u98de\u673a\u5efa\u7acb\u4f5c\u4e1a\u5173\u7cfb\u3002" },
-    { key: "tow-release", label: "\u8131\u79bb\u7275\u5f15", time: phases.tow_release, actor: "\u5730\u670d\u516c\u53f8", note: "\u62d6\u884c\u7ed3\u675f\uff0c\u98de\u673a\u8f6c\u5165\u81ea\u4e3b\u6ed1\u884c\u3002" },
-    { key: "runway-entry", label: "\u8fdb\u5165\u8dd1\u9053", time: phases.runway_entry, actor: "\u673a\u573a\u8fd0\u63a7", note: "\u98de\u673a\u5b8c\u6210\u6ed1\u884c\u5e76\u8fdb\u5165\u8dd1\u9053\u7b49\u5f85\u8d77\u98de\u3002" },
-    { key: "takeoff", label: "\u8d77\u98de\u79bb\u573a", time: phases.takeoff, actor: "\u822a\u73ed\u6267\u884c", note: "\u98de\u673a\u79bb\u5730\uff0c\u6848\u4f8b\u8fdb\u5165\u98de\u884c\u9636\u6bb5\u3002" },
-    { key: "track-end", label: "\u8f68\u8ff9\u7ed3\u675f", time: phases.track_end, actor: "\u7cfb\u7edf\u5f52\u6863", note: "\u5f53\u6b21\u8f68\u8ff9\u91c7\u6837\u7ed3\u675f\uff0c\u8bc1\u636e\u5305\u7b49\u5f85\u5f52\u6863\u3002" }
+    { key: "tow-start", label: "开始牵引", time: phases.tow_start, actor: "地服公司", note: "推出指令下发后，牵引车与飞机建立作业关系。" },
+    { key: "tow-release", label: "脱离牵引", time: phases.tow_release, actor: "地服公司", note: "拖行作业结束，飞机转入自主滑行阶段。" },
+    { key: "runway-entry", label: "进入跑道", time: phases.runway_entry, actor: "机场运控", note: "飞机完成滑行并进入跑道等待起飞。" },
+    { key: "takeoff", label: "起飞离场", time: phases.takeoff, actor: "航班执行", note: "飞机离地后，案例转入飞行阶段。" },
+    { key: "track-end", label: "轨迹结束", time: phases.track_end, actor: "系统归档", note: "轨迹采样结束，证据包等待归档。" }
   ].filter((item) => item.time), [phases]);
 
   const riskSeries = useMemo(() => interactionSamples.map((item) => ({
@@ -249,10 +269,11 @@ export default function TrajectoryPage() {
     distance: item.distance_m,
     speed: item.vehicle_speed,
     risk: item.distance_m < 5 && item.vehicle_speed > 3 ? ("combined" as const) : item.distance_m < 5 ? ("distance" as const) : item.vehicle_speed > 3 ? ("speed" as const) : undefined,
-    note: item.distance_m < 5 && item.vehicle_speed > 3 ? "\u53cc\u91cd\u98ce\u9669" : item.distance_m < 5 ? "\u51c0\u8ddd\u4e0d\u8db3" : item.vehicle_speed > 3 ? "\u8d85\u901f" : undefined
+    note: item.distance_m < 5 && item.vehicle_speed > 3 ? "双重风险" : item.distance_m < 5 ? "净距不足" : item.vehicle_speed > 3 ? "超速" : undefined
   })), [interactionSamples]);
   const riskMoments = useMemo(() => riskSeries.filter((item) => item.risk), [riskSeries]);
-  const selectedEvent = events.find((item) => item.key === selectedEventKey) || events[0];
+  const activeEvent = useMemo(() => findCurrentEvent(events, currentMs), [events, currentMs]);
+  const selectedEvent = events.find((item) => item.key === selectedEventKey) || activeEvent || events[0];
 
   useEffect(() => {
     if (!playing || frames.length <= 1) return;
@@ -264,9 +285,14 @@ export default function TrajectoryPage() {
         }
         return current + 1;
       });
-    }, 360);
+    }, Math.max(110, Math.round(360 / playbackRate)));
     return () => window.clearInterval(timer);
-  }, [playing, frames.length]);
+  }, [playing, frames.length, playbackRate]);
+
+  useEffect(() => {
+    if (!events.length) return;
+    setSelectedEventKey(activeEvent?.key);
+  }, [activeEvent, events]);
 
   useEffect(() => {
     if (!followView || !mapRef.current) return;
@@ -305,14 +331,14 @@ export default function TrajectoryPage() {
   }
 
   if (!trace || !currentCase) {
-    return <Empty description="\u5f53\u524d\u6ca1\u6709\u53ef\u5c55\u793a\u7684\u8f68\u8ff9\u6848\u4f8b" />;
+    return <Empty description="当前没有可展示的轨迹案例" />;
   }
 
   const analysisCards = [
-    { label: "\u5173\u8054\u53ef\u4fe1\u5ea6", value: `${association?.confidence_score ?? "--"} \u5206` },
-    { label: "\u6700\u5c0f\u51c0\u8ddd", value: association?.min_distance_m ? `${association.min_distance_m} m` : "--" },
-    { label: "\u7275\u5f15\u5cf0\u503c\u901f\u5ea6", value: metrics?.speed_peak ? `${metrics.speed_peak} km/h` : "--" },
-    { label: "\u98ce\u9669\u65f6\u523b", value: `${riskMoments.length} \u4e2a` }
+    { label: "关联可信度", value: `${association?.confidence_score ?? "--"} 分` },
+    { label: "最小净距", value: association?.min_distance_m ? `${association.min_distance_m} m` : "--" },
+    { label: "牵引峰值速度", value: metrics?.speed_peak ? `${metrics.speed_peak} km/h` : "--" },
+    { label: "风险时刻", value: `${riskMoments.length} 个` }
   ];
 
   const candidateItems = (association?.top_candidates || []).map((item, index) => ({
@@ -320,32 +346,32 @@ export default function TrajectoryPage() {
     value: item.score,
     secondaryValue: item.interaction_ratio,
     tone: index === 0 ? "linear-gradient(90deg, #0d5bd7, #58a7ff)" : index === 1 ? "linear-gradient(90deg, #f5b955, #ffd88f)" : "linear-gradient(90deg, #ef6b6b, #f59a52)",
-    note: "\u4ea4\u4e92\u8986\u76d6\u7387"
+    note: "交互覆盖率"
   }));
 
   return (
     <div className="page-shell trajectory-page">
       <PageQuickNav
-        title={"\u8f68\u8ff9\u5bfc\u822a"}
+        title="轨迹导航"
         items={[
-          { key: "workbench", label: "\u8ffd\u6eaf\u5de5\u4f5c\u53f0", targetId: "trace-workbench-zone" },
-          { key: "evidence", label: "\u94fe\u4e0a\u8bc1\u636e", targetId: "trace-evidence-zone" }
+          { key: "workbench", label: "追溯工作台", targetId: "trace-workbench-zone" },
+          { key: "evidence", label: "链上证据", targetId: "trace-evidence-zone" }
         ]}
       />
 
       <section className="hero-card hero-card-plain">
         <div className="hero-surface hero-surface-dashboard hero-surface-dense">
           <div>
-            <Typography.Text className="section-kicker">{`\u8f68\u8ff9\u8ffd\u6eaf / \u5f53\u524d\u6848\u4f8b`}</Typography.Text>
+            <Typography.Text className="section-kicker">轨迹追溯 / 当前案例</Typography.Text>
             <Typography.Title level={1} style={{ margin: "10px 0 10px", color: "#0f3976", fontSize: 34 }}>
-              {currentCase.flight_identity} {"\u7275\u5f15\u8f68\u8ff9\u8ffd\u6eaf"}
+              {currentCase.flight_identity} 牵引轨迹追溯
             </Typography.Title>
             <Typography.Paragraph style={{ maxWidth: 760, margin: 0 }}>{currentCase.summary}</Typography.Paragraph>
             <div className="tag-ribbon" style={{ marginTop: 14 }}>
-              <Tag color="blue" className="header-tag">{`\u673a\u4f4d ${currentCase.stand_id}`}</Tag>
-              <Tag color="orange" className="header-tag">{`\u7275\u5f15\u8f66 ${currentCase.vehicle_id}`}</Tag>
-              <Tag color={currentCase.risk_level === "\u9ad8" ? "red" : currentCase.risk_level === "\u4e2d" ? "gold" : "blue"} className="header-tag">{`\u98ce\u9669 ${currentCase.risk_level}`}</Tag>
-              <Tag color="purple" className="header-tag">{`\u94fe\u4e0a\u8bb0\u5f55 ${currentCase.blockchain_records.length} \u6761`}</Tag>
+              <Tag color="blue" className="header-tag">机位 {currentCase.stand_id}</Tag>
+              <Tag color="orange" className="header-tag">牵引车 {currentCase.vehicle_id}</Tag>
+              <Tag color={currentCase.risk_level === "高" ? "red" : currentCase.risk_level === "中" ? "gold" : "blue"} className="header-tag">风险 {currentCase.risk_level}</Tag>
+              <Tag color="purple" className="header-tag">链上记录 {currentCase.blockchain_records.length} 条</Tag>
             </div>
           </div>
           <div className="workspace-hero-actions trace-hero-actions">
@@ -353,7 +379,7 @@ export default function TrajectoryPage() {
               value={caseId}
               onChange={setCaseId}
               style={{ width: 280 }}
-              options={(trace.cases || []).map((item) => ({ value: item.case_id, label: `${item.flight_identity} / ${item.status} / ${item.confidence}\u5206` }))}
+              options={(trace.cases || []).map((item) => ({ value: item.case_id, label: `${item.flight_identity} / ${item.status} / ${item.confidence}分` }))}
             />
           </div>
         </div>
@@ -363,17 +389,18 @@ export default function TrajectoryPage() {
         <section id="trace-workbench-zone" className="trace-workbench-grid">
           <div className="board-panel board-panel-hard board-panel-wide trace-map-panel-shell">
             <div className="board-title-row">
-              <Typography.Title level={4} style={{ margin: 0 }}>{"\u8f68\u8ff9\u56de\u653e\u4e0e\u4e8b\u4ef6\u5b9a\u4f4d"}</Typography.Title>
+              <Typography.Title level={4} style={{ margin: 0 }}>轨迹回放与事件定位</Typography.Title>
             </div>
             <div className="trace-map-toolbar trace-map-toolbar-tight">
               <div className="trace-toolbar-side">
-                <Button icon={<AimOutlined />} onClick={() => setFollowView((value) => !value)}>{followView ? "\u53d6\u6d88\u8ddf\u968f" : "\u81ea\u52a8\u8ddf\u968f"}</Button>
-                <Button icon={playing ? <PauseOutlined /> : <CaretRightFilled />} onClick={() => setPlaying((value) => !value)}>{playing ? "\u6682\u505c" : "\u64ad\u653e"}</Button>
-                <Button icon={<RedoOutlined />} onClick={replay}>{"\u91cd\u64ad"}</Button>
+                <Button icon={<AimOutlined />} onClick={() => setFollowView((value) => !value)}>{followView ? "取消跟随" : "自动跟随"}</Button>
+                <Button icon={playing ? <PauseOutlined /> : <CaretRightFilled />} onClick={() => setPlaying((value) => !value)}>{playing ? "暂停" : "播放"}</Button>
+                <Button icon={<RedoOutlined />} onClick={replay}>重播</Button>
+                <Select value={playbackRate} onChange={setPlaybackRate} style={{ width: 108 }} options={PLAYBACK_OPTIONS} />
               </div>
               <div className="trace-toolbar-side">
-                <span className="trace-phase-chip trace-phase-chip-clean">{`\u5f53\u524d\u65f6\u95f4 ${formatClock(currentMs !== null ? frameLabelMap.get(currentMs) : undefined)}`}</span>
-                <span className="trace-phase-chip trace-phase-chip-risk">{`\u98ce\u9669\u65f6\u523b ${riskMoments.length} \u4e2a`}</span>
+                <span className="trace-phase-chip trace-phase-chip-clean">当前阶段 {activeEvent?.label || "轨迹准备"}</span>
+                <span className="trace-phase-chip trace-phase-chip-risk">当前时间 {formatClock(currentMs !== null ? frameLabelMap.get(currentMs) : undefined)}</span>
               </div>
             </div>
             <div className="trace-workbench-stage">
@@ -381,7 +408,7 @@ export default function TrajectoryPage() {
                 <Map
                   ref={mapRef}
                   mapLib={maplibregl}
-                  initialViewState={{ longitude: towPath[0]?.lon || 121.80, latitude: towPath[0]?.lat || 31.15, zoom: 15.8 }}
+                  initialViewState={{ longitude: towPath[0]?.lon || 121.8, latitude: towPath[0]?.lat || 31.15, zoom: 15.8 }}
                   mapStyle={MAP_STYLE as never}
                   attributionControl={false}
                 >
@@ -389,17 +416,16 @@ export default function TrajectoryPage() {
                   {towTrail.length ? <Source id="tow-aircraft" type="geojson" data={toFeature(towTrail) as never}><Layer {...aircraftTowLayer} /></Source> : null}
                   {departureTrail.length ? <Source id="departure-aircraft" type="geojson" data={toFeature(departureTrail) as never}><Layer {...aircraftDepartureLayer} /></Source> : null}
                   {vehicleTrail.length ? <Source id="vehicle-path" type="geojson" data={toFeature(vehicleTrail) as never}><Layer {...vehicleLayer} /></Source> : null}
-                  {interactionLine ? <Source id="interaction-line" type="geojson" data={interactionLine as never}><Layer {...connectLayer} /></Source> : null}
                   {aircraftMarker ? <Marker longitude={aircraftMarker.lon} latitude={aircraftMarker.lat}><span className="legend-icon aircraft"><PlaneGlyph /></span></Marker> : null}
                   {vehicleMarker ? <Marker longitude={vehicleMarker.lon} latitude={vehicleMarker.lat}><span className="legend-icon vehicle"><TugGlyph /></span></Marker> : null}
                 </Map>
                 <div className="trace-map-overlay trace-map-overlay-compact">
                   <div className="map-inline-legend">
-                    <span className="map-legend-chip"><i className="legend-icon aircraft"><PlaneGlyph /></i>{"\u98de\u673a"}</span>
-                    <span className="map-legend-chip"><i className="legend-icon vehicle"><TugGlyph /></i>{"\u7275\u5f15\u8f66"}</span>
+                    <span className="map-legend-chip"><i className="legend-icon aircraft"><PlaneGlyph /></i>飞机</span>
+                    <span className="map-legend-chip"><i className="legend-icon vehicle"><TugGlyph /></i>牵引车</span>
                   </div>
-                  <div className="overlay-metric"><span>{"\u7275\u5f15\u65f6\u957f"}</span><strong>{metrics?.tow_duration_min ?? "--"} min</strong></div>
-                  <div className="overlay-metric"><span>{"\u8131\u79bb\u540e\u81f3\u8d77\u98de"}</span><strong>{metrics?.release_to_takeoff_min ?? "--"} min</strong></div>
+                  <div className="overlay-metric"><span>牵引时长</span><strong>{metrics?.tow_duration_min ?? "--"} min</strong></div>
+                  <div className="overlay-metric"><span>脱离后至起飞</span><strong>{metrics?.release_to_takeoff_min ?? "--"} min</strong></div>
                 </div>
               </div>
               <aside className="trace-workbench-side">
@@ -429,7 +455,7 @@ export default function TrajectoryPage() {
               </aside>
             </div>
             <div className="timeline-slider timeline-slider-tight">
-              <Typography.Text type="secondary">{"\u56de\u653e\u8fdb\u5ea6"}</Typography.Text>
+              <Typography.Text type="secondary">回放进度</Typography.Text>
               <Slider
                 value={progress}
                 onChange={(value) => {
@@ -446,13 +472,13 @@ export default function TrajectoryPage() {
           <div className="trace-bottom-grid">
             <div className="board-panel board-panel-hard trace-risk-board">
               <div className="board-title-row">
-                <Typography.Title level={4} style={{ margin: 0 }}>{"\u7275\u5f15\u5173\u8054\u98ce\u9669\u65f6\u95f4\u8f74"}</Typography.Title>
+                <Typography.Title level={4} style={{ margin: 0 }}>牵引关联风险时间轴</Typography.Title>
               </div>
               <TrajectoryRiskChart items={riskSeries} />
             </div>
             <div className="board-panel board-panel-hard trace-summary-panel">
               <div className="board-title-row">
-                <Typography.Title level={4} style={{ margin: 0 }}>{"\u5f53\u524d\u6848\u4f8b\u6458\u8981"}</Typography.Title>
+                <Typography.Title level={4} style={{ margin: 0 }}>当前案例摘要</Typography.Title>
               </div>
               <div className="trace-analysis-topline trace-analysis-topline-tight">
                 {analysisCards.map((item) => (
@@ -467,8 +493,8 @@ export default function TrajectoryPage() {
                       <Typography.Text type="secondary">{`${item.vehicle_id} / ${formatClock(item.begin_time)} - ${formatClock(item.end_time)}`}</Typography.Text>
                     </div>
                     <div className="queue-meta queue-meta-stack">
-                      <Tag color="blue">{`${item.match.confidence_score ?? "--"} \u5206`}</Tag>
-                      <Typography.Text type="secondary">{item.match.confidence_label || "\u5f85\u6821\u9a8c"}</Typography.Text>
+                      <Tag color="blue">{`${item.match.confidence_score ?? "--"} 分`}</Tag>
+                      <Typography.Text type="secondary">{item.match.confidence_label || "待校验"}</Typography.Text>
                     </div>
                   </div>
                 ))}
@@ -479,36 +505,36 @@ export default function TrajectoryPage() {
       ) : (
         <section id="trace-evidence-zone" className="trace-evidence-grid">
           <div className="board-panel board-panel-hard">
-            <div className="board-title-row"><Typography.Title level={4} style={{ margin: 0 }}>{"\u5019\u9009\u7275\u5f15\u8f66\u6392\u5e8f"}</Typography.Title></div>
-            <HorizontalBarChart items={candidateItems} maxValue={100} valueFormatter={(value) => `${value} \u5206`} secondaryFormatter={(value) => `${value}%`} />
+            <div className="board-title-row"><Typography.Title level={4} style={{ margin: 0 }}>候选牵引车排序</Typography.Title></div>
+            <HorizontalBarChart items={candidateItems} maxValue={100} valueFormatter={(value) => `${value} 分`} secondaryFormatter={(value) => `${value}%`} />
           </div>
           <div className="board-panel board-panel-hard">
-            <div className="board-title-row"><Typography.Title level={4} style={{ margin: 0 }}>{"\u94fe\u4e0a\u4e8b\u4ef6\u8bb0\u5f55"}</Typography.Title></div>
+            <div className="board-title-row"><Typography.Title level={4} style={{ margin: 0 }}>链上事件记录</Typography.Title></div>
             <Table
               rowKey="hash"
               pagination={false}
               columns={[
-                { title: "\u901a\u9053", dataIndex: "channel", key: "channel", width: 110 },
-                { title: "\u65f6\u95f4", dataIndex: "timestamp", key: "timestamp", width: 182 },
-                { title: "\u5199\u5165\u4e3b\u4f53", dataIndex: "actor", key: "actor", width: 140 },
-                { title: "\u533a\u5757\u54c8\u5e0c", dataIndex: "hash", key: "hash" }
+                { title: "通道", dataIndex: "channel", key: "channel", width: 110 },
+                { title: "时间", dataIndex: "timestamp", key: "timestamp", width: 182 },
+                { title: "写入主体", dataIndex: "actor", key: "actor", width: 140 },
+                { title: "区块哈希", dataIndex: "hash", key: "hash" }
               ]}
               dataSource={currentCase.blockchain_records}
               scroll={{ x: 960 }}
             />
           </div>
           <div className="board-panel board-panel-hard board-panel-wide">
-            <div className="board-title-row"><Typography.Title level={4} style={{ margin: 0 }}>{"\u5168\u8fc7\u7a0b\u8bc1\u636e\u94fe"}</Typography.Title></div>
+            <div className="board-title-row"><Typography.Title level={4} style={{ margin: 0 }}>全过程证据链</Typography.Title></div>
             <Table
               rowKey="time"
               pagination={false}
               columns={[
-                { title: "\u9636\u6bb5", dataIndex: "stage", key: "stage", width: 120 },
-                { title: "\u901a\u9053", dataIndex: "channel", key: "channel", width: 110 },
-                { title: "\u65f6\u95f4", dataIndex: "time", key: "time", width: 182 },
-                { title: "\u8d23\u4efb\u4e3b\u4f53", dataIndex: "actor", key: "actor", width: 140 },
-                { title: "\u5904\u7f6e\u8bf4\u660e", dataIndex: "detail", key: "detail" },
-                { title: "\u72b6\u6001", dataIndex: "status", key: "status", width: 110 }
+                { title: "阶段", dataIndex: "stage", key: "stage", width: 120 },
+                { title: "通道", dataIndex: "channel", key: "channel", width: 110 },
+                { title: "时间", dataIndex: "time", key: "time", width: 182 },
+                { title: "责任主体", dataIndex: "actor", key: "actor", width: 140 },
+                { title: "处置说明", dataIndex: "detail", key: "detail" },
+                { title: "状态", dataIndex: "status", key: "status", width: 110 }
               ]}
               dataSource={currentCase.timeline}
               scroll={{ x: 1180 }}

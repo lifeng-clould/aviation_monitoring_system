@@ -185,11 +185,11 @@ export default function RiskLabPage() {
             <div className="queue-list live-alert-list">
               {liveAlerts.map((item) => (
                 <div className={`queue-item queue-item-alert ${item.severity}`} key={`${item.case_id}-${item.time}-${item.title}`}>
-                  <div>
+                  <div className="queue-alert-body">
                     <Typography.Text strong>{item.title}</Typography.Text>
                     <Typography.Text type="secondary">{item.detail}</Typography.Text>
                   </div>
-                  <div className="queue-meta queue-meta-stack">
+                  <div className="queue-meta queue-meta-stack queue-alert-meta">
                     <Tag color={item.severity === "critical" ? "red" : item.severity === "high" ? "orange" : item.severity === "medium" ? "gold" : "blue"}>{item.severity}</Tag>
                     <Typography.Text type="secondary">{departments(item.severity).join(" / ")}</Typography.Text>
                   </div>
@@ -264,3 +264,4 @@ export default function RiskLabPage() {
     </div>
   );
 }
+

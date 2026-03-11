@@ -313,3 +313,9 @@ INFO:     127.0.0.1:61612 - "GET /api/platform/trace HTTP/1.1" 200 OK
 INFO:     127.0.0.1:61662 - "GET /api/platform/trace/HU7120-2025-09-15-D HTTP/1.1" 200 OK
 INFO:     127.0.0.1:61662 - "GET /api/platform/trace/HU7120-2025-09-15-D HTTP/1.1" 200 OK
 INFO:     127.0.0.1:61777 - "GET /assets/index-BXE1qxlB.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62302 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62378 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62448 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52603 - "GET /api/platform/governance HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52650 - "GET /api/datasets/clean_main?limit=60&role=%E6%9C%BA%E5%9C%BA%E8%BF%90%E6%8E%A7&view_mode=masked HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52649 - "GET /api/platform/governance HTTP/1.1" 200 OK
